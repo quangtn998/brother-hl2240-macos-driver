@@ -1,0 +1,29 @@
+DRIVER MÁY IN BROTHER HL-2240 / HL-2240D CHO macOS
+(Mac chip M1/M2/M3/M4 và Mac Intel, macOS 11 trở lên)
+
+CÀI ĐẶT
+1. Cắm dây USB máy in vào Mac, bật máy in.
+2. Bấm đúp file Brother-HL2240D-Driver.pkg.
+   Nếu Mac báo không mở được vì không xác minh được nhà phát triển:
+     - Mở System Settings > Privacy & Security
+     - Kéo xuống, bấm "Open Anyway" cạnh dòng báo Brother-HL2240D-Driver.pkg
+     - Bấm đúp file .pkg lần nữa, chọn Open
+3. Bấm Continue / Install, nhập mật khẩu Mac.
+4. Xong. In từ app bất kỳ, chọn "Brother HL-2240D".
+   Trong Chrome: ở ô Destination bấm "See more" để thấy máy in,
+   hoặc bấm Option + Command + P để mở hộp thoại in của macOS.
+
+NẾU KHÔNG THẤY MÁY IN SAU KHI CÀI
+- Kiểm tra máy in đã cắm USB và bật chưa (nếu cắm sau khi cài thì làm bước dưới).
+- Vào System Settings > Printers & Scanners > Add Printer,
+  chọn "Brother HL-2240D series", mục Use chọn "Brother HL-2240D series (brlaser)".
+
+TUỲ CHỌN KHI IN
+- Toner save mode: tiết kiệm mực.
+- 1200HQ: in nét hơn (chậm hơn). Nếu đèn Error nháy, chọn lại 600 DPI.
+- In 2 mặt: chỉ bản HL-2240D có. Bản HL-2240 thường để tắt.
+
+GỠ CÀI ĐẶT
+Mở Terminal, gõ "sudo bash " (có dấu cách), kéo file uninstall.sh vào cửa sổ Terminal, Enter, nhập mật khẩu.
+
+Driver dựa trên brlaser (https://github.com/pdewacht/brlaser), giấy phép GPL-2.

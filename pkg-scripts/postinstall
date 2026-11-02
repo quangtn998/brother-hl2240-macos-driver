@@ -1,0 +1,30 @@
+#!/bin/bash
+# Add the USB print queue for an HL-2240/HL-2240D using the installed driver.
+# Runs as root: as the .pkg postinstall step, and from install.sh.
+set -uo pipefail
+
+QUEUE="Brother_HL_2240D"
+PPD="/Library/Printers/Brother-HL2240-brlaser/br2240d.ppd"
+
+# Only scan USB: scanning network backends can take ~20 s.
+URI="$(lpinfo --include-schemes usb -v 2>/dev/null | awk '/usb:\/\/Brother\/HL-224/ {print $2; exit}')"
+if [[ -z "$URI" ]]; then
+  echo "Driver installed, but no HL-2240 found on USB. Plug it in, power on," >&2
+  echo "then add it in System Settings > Printers & Scanners." >&2
+  exit 0
+fi
+
+echo "==> Adding queue $QUEUE -> $URI"
+lpadmin -p "$QUEUE" -E -v "$URI" -P "$PPD" \
+  -D "Brother HL-2240D" -L "USB" -o printer-is-shared=false \
+  -o PageSize=A4 -o Duplex=None || exit 0
+cupsenable "$QUEUE"
+cupsaccept "$QUEUE"
+
+# Make it the default printer of the logged-in user (not root, whose writes
+# into the user's ~/.cups would lock the user out of that folder).
+CONSOLE_USER="${SUDO_USER:-$(stat -f%Su /dev/console)}"
+if [[ -n "$CONSOLE_USER" && "$CONSOLE_USER" != "root" ]]; then
+  sudo -u "$CONSOLE_USER" -H lpoptions -d "$QUEUE" >/dev/null 2>&1 || true
+fi
+exit 0

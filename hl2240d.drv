@@ -1,0 +1,59 @@
+// PPD definition for Brother HL-2240 / HL-2240D on macOS, using the brlaser
+// filter. HL-2240D speaks the same HBP protocol as the HL-2220 entry in
+// upstream brlaser (vendor/brlaser/brlaser.drv.in).
+// @FILTER@ and @VERSION@ are substituted by build.sh.
+
+#include <font.defs>
+#include <media.defs>
+
+Font *
+Manufacturer "Brother"
+Version "@VERSION@"
+
+Filter application/vnd.cups-raster 33 @FILTER@
+
+// The filter needs 1-bit black raster.
+ColorDevice false
+*ColorModel Gray k chunky 0
+
+*Resolution k 1 0 0 0 "600dpi/600 DPI"
+Resolution k 1 0 0 0 "1200dpi/1200HQ"
+
+HWMargins 8 8 8 16
+*MediaSize A4
+MediaSize A5
+MediaSize A6
+MediaSize B5
+MediaSize EnvC5
+MediaSize EnvMonarch
+MediaSize EnvDL
+MediaSize Executive
+MediaSize Legal
+MediaSize Letter
+
+// Numbers must match the filter source code.
+*InputSlot 0 "Auto/Auto-select"
+InputSlot 1 "Tray1/Tray 1"
+InputSlot 5 "Manual/Manual"
+
+*MediaType 0 "PLAIN/Plain paper"
+MediaType 1 "THIN/Thin paper"
+MediaType 2 "THICK/Thick paper"
+MediaType 3 "THICKER/Thicker paper"
+MediaType 4 "BOND/Bond paper"
+MediaType 5 "TRANS/Transparencies"
+MediaType 6 "ENV/Envelopes"
+
+Option "brlaserEconomode/Toner save mode" Boolean AnySetup 10
+  *Choice False/Off "<</cupsInteger10 0>>setpagedevice"
+  Choice True/On "<</cupsInteger10 1>>setpagedevice"
+
+{
+  ModelName "HL-2240D series"
+  Attribute "NickName" "" "Brother HL-2240D series (brlaser)"
+  Attribute "1284DeviceID" "" "MFG:Brother;CMD:PJL,HBP;MDL:HL-2240D series;CLS:PRINTER;"
+  Attribute "Product" "" "(Brother HL-2240D series)"
+  // Only the HL-2240D has a duplex unit; plain HL-2240 users leave it off.
+  Duplex rotated
+  PCFileName "br2240d.ppd"
+}
